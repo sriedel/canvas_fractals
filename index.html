@@ -8,11 +8,13 @@
     <script src="complex.js"></script>
     <script src="julia.js"></script>
     <script src="julia_painter.js"></script>
+    <script src="julia_controller.js"></script>
     <script>
       var width = 400;
       var height = 400;
 
       var painter = new JuliaPainter( 'canvas', width, height );
+      var controller = new JuliaController( 'canvas' );
 
       var julia = new Julia( width, height );
       julia.compute( 25, 
