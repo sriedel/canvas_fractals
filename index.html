@@ -3,13 +3,17 @@
 <html>
   <head></head>
   <body>
-    <canvas id="canvas" width="400" height="400"></canvas>
+    <canvas id="canvas" width="800" height="800"></canvas>
     <div id="function_definition_container">
       Function Definition: <span id="function_definition"></span>
     </div>
     
     <div id="iterations_container">
       Iterations: <span id="iterations"></span>
+    </div>
+
+    <div id="render_time_container">
+      Render time: <span id="render_time"></span> ms
     </div>
 
     <script src="complex.js"></script>
@@ -19,8 +23,11 @@
     <script>
       var functionElement = document.getElementById( 'function_definition' );
       var iterationsElement = document.getElementById( 'iterations' );
+      var renderTimeElement = document.getElementById( 'render_time' );
 
       function repaintFor( x, y, iterationsDelta ) {
+        var startTime = (new Date).getTime();
+
         var mappedComplexValue = julia.mapPixelToComplex( x, y );
         JuliaController.adjustIterations( iterationsDelta );
 
@@ -28,14 +35,17 @@
                        function( c ) {
                          return c.multiply( c ).add( mappedComplexValue );
                        } );
-        painter.buildImage( julia.resultArray );
+        painter.buildImage( julia.resultArray, JuliaController.iterations );
 
         functionElement.innerHTML = "z^2 + " + mappedComplexValue.real + " + i" + mappedComplexValue.imaginary;
         iterationsElement.innerHTML = JuliaController.iterations;
+
+        var renderTime = (new Date).getTime() - startTime;
+        renderTimeElement.innerHTML = renderTime;
       }
 
-      var width = 400;
-      var height = 400;
+      var width = 800;
+      var height = 800;
 
       var painter = new JuliaPainter( 'canvas', width, height );
       var julia = new Julia( width, height );

@@ -19,18 +19,18 @@ JuliaPainter.prototype.blank =
   }
 
 JuliaPainter.prototype.buildImage = 
-  function( origin ) {
+  function( origin, steps ) {
     for( var y = 0 ; y < this.height; ++y ) {
       for( var x = 0; x < this.width; ++x ) {
         var originIndex = y * this.width + x;
         var imageDataIndex = originIndex * 4; // RGBA
         var value = origin[originIndex];
 
-        var intensity = ( value / 15 ) * 255;
+        var intensity = ( value / steps ) * 255;
 
-        this.imagedata.data[imageDataIndex] = intensity / 3;
-        this.imagedata.data[imageDataIndex + 1] = intensity / 2;
-        this.imagedata.data[imageDataIndex + 2] = intensity;
+        this.imagedata.data[imageDataIndex] = intensity;
+        this.imagedata.data[imageDataIndex + 1] = intensity * 2;
+        this.imagedata.data[imageDataIndex + 2] = intensity * 3;
         this.imagedata.data[imageDataIndex + 3] = 255; // Alpha
       }
     }
