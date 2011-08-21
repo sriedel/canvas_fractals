@@ -18,9 +18,9 @@
       context.putImageData( imagedata, 0, 0 );
 
       var julia = new Julia( 400, 400 );
-      julia.compute( 25, 
+      julia.compute( 15, 
                      function( c ) {
-                       return c.multiply( c ).add( new Complex( -1.3, 0 ) );
+                       return c.multiply( c ).add( -1.3 );
                      });
 
       var painter = new JuliaPainter( 400, 400 );

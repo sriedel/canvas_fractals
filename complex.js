@@ -9,8 +9,14 @@ Complex.prototype.complement =
 
 Complex.prototype.add = 
   function( value ) {
-    return new Complex( this.real + value.real, 
-                        this.imaginary + value.imaginary );
+    if( value instanceof Complex ) {
+      this.real += value.real;
+      this.imaginary += value.imaginary;
+    } else {
+      this.real += value;
+    }
+
+    return this;
   };
 
 Complex.prototype.multiply = 
@@ -19,10 +25,18 @@ Complex.prototype.multiply =
                    this.imaginary * value.imaginary;
     var new_imaginary = this.real * value.imaginary + 
                         this.imaginary * value.real;
-    return new Complex( new_real, new_imaginary );
+    this.real = new_real;
+    this.imaginary = new_imaginary;
+
+    return this;
   };
 
 Complex.prototype.absolute = 
   function() {
-    return Math.sqrt( this.multiply( this.complement() ).real );
+    return Math.sqrt( this.abs_squared() );
+  };
+
+Complex.prototype.abs_squared =
+  function() {
+    return this.real * this.real + this.imaginary * this.imaginary;
   };
