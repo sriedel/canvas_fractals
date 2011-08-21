@@ -12,23 +12,15 @@
       var width = 400;
       var height = 400;
 
-      var canvas = document.getElementById( 'canvas' );
-      var context = canvas.getContext( "2d" );
-      var imagedata = context.createImageData( width, height );
-      for( var i = 0, len = imagedata.data.length; i < len ; ++i ) {
-        imagedata.data[i] = 128;
-      }
-      context.putImageData( imagedata, 0, 0 );
+      var painter = new JuliaPainter( 'canvas', width, height );
 
       var julia = new Julia( width, height );
-      julia.compute( 15, 
+      julia.compute( 25, 
                      function( c ) {
                        return c.multiply( c ).add( -1.3 );
                      });
 
-      var painter = new JuliaPainter( width, height );
-      painter.buildImage( julia.resultArray, imagedata );
-      context.putImageData( imagedata, 0, 0 );
+      painter.buildImage( julia.resultArray );
     </script>
   </body>
 </html>

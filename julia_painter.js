@@ -1,10 +1,25 @@
-var JuliaPainter = function( width, height ) {
+var JuliaPainter = function( domId, width, height ) {
   this.width = width;
   this.height = height;
+
+  this.element = document.getElementById( domId );
+  this.context = this.element.getContext( "2d" );
+  this.imagedata = this.context.createImageData( width, height );
+
+  this.blank();
 };
 
+JuliaPainter.prototype.blank = 
+  function() {
+    for( var i = 0, len = this.imagedata.data.length; i < len ; ++i ) {
+      this.imagedata.data[i] = 128;
+    }
+
+    this.render();
+  }
+
 JuliaPainter.prototype.buildImage = 
-  function( origin, imageDataResult ) {
+  function( origin ) {
     for( var y = 0 ; y < this.height; ++y ) {
       for( var x = 0; x < this.width; ++x ) {
         var originIndex = y * this.width + x;
@@ -13,10 +28,17 @@ JuliaPainter.prototype.buildImage =
 
         var intensity = ( value / 15 ) * 255;
 
-        imageDataResult.data[imageDataIndex] = intensity / 3;
-        imageDataResult.data[imageDataIndex + 1] = intensity / 2;
-        imageDataResult.data[imageDataIndex + 2] = intensity;
-        imageDataResult.data[imageDataIndex + 3] = 255; // Alpha
+        this.imagedata.data[imageDataIndex] = intensity / 3;
+        this.imagedata.data[imageDataIndex + 1] = intensity / 2;
+        this.imagedata.data[imageDataIndex + 2] = intensity;
+        this.imagedata.data[imageDataIndex + 3] = 255; // Alpha
       }
     }
+
+    this.render();
+  }
+
+JuliaPainter.prototype.render = 
+  function() {
+    this.context.putImageData( this.imagedata, 0, 0 );
   }
