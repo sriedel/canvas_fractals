@@ -11,8 +11,7 @@ JuliaPainter.prototype.buildImage =
         var imageDataIndex = originIndex * 4; // RGBA
         var value = origin[originIndex];
 
-        var intensity = ( value / 2.0 ) * 128;
-        intensity = intensity > 255 ? 255 : intensity;
+        var intensity = ( value / 15 ) * 255;
 
         imageDataResult.data[imageDataIndex] = intensity / 3;
         imageDataResult.data[imageDataIndex + 1] = intensity / 2;

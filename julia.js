@@ -26,18 +26,21 @@ Julia.prototype.compute =
                ++x, point.real += this.realStep ) {
 
         var resultIndex = y * this.width + x;
-        this.resultArray[resultIndex] = this.spotCompute( iterations, point, func );
+        this.resultArray[resultIndex] = this.spotCompute( iterations, 2.0, point, func );
       }
     }
   };
 
 Julia.prototype.spotCompute =
-  function( iterations, point, func ) {
+  function( iterations, triggerValue, point, func ) {
     var computePoint = new Complex( point.real, point.imaginary );
+    var iteration = 0;
 
-    for( var i = 0; i < iterations; ++i ) {
+    while( computePoint.absolute() < triggerValue && iteration < iterations ) {
       computePoint = func( computePoint );
+      ++iteration;
     }
-    return computePoint.absolute();
+
+    return iteration;
   };
 
