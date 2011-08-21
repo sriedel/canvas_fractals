@@ -12,9 +12,12 @@ var Julia = function( width, height ) {
 };
 
 Julia.prototype.compute = 
-  function( iterations, func ) {
+  function( maxIterations, func ) {
     this.resultArray = [];
     var point = new Complex( this.minReal, this.maxImg );
+    var triggerValue = 2.0;
+    var triggerValueSquare = triggerValue * triggerValue;
+    var resultIndex = 0;
 
     for( var y = 0;
              y < this.height;
@@ -25,23 +28,19 @@ Julia.prototype.compute =
                x < this.width;
                ++x, point.real += this.realStep ) {
 
-        var resultIndex = y * this.width + x;
-        this.resultArray[resultIndex] = this.spotCompute( iterations, 2.0, point, func );
+        var computePoint = new Complex( point.real, point.imaginary );
+        var iteration = 0;
+
+        while( iteration < maxIterations &&
+               ( computePoint.real * computePoint.real + 
+                 computePoint.imaginary * computePoint.imaginary ) < triggerValue ) {
+          computePoint = func( computePoint );
+          ++iteration;
+        }
+
+        this.resultArray[resultIndex++] = iteration;
       }
     }
-  };
-
-Julia.prototype.spotCompute =
-  function( iterations, triggerValue, point, func ) {
-    var computePoint = new Complex( point.real, point.imaginary );
-    var iteration = 0;
-
-    while( computePoint.absolute() < triggerValue && iteration < iterations ) {
-      computePoint = func( computePoint );
-      ++iteration;
-    }
-
-    return iteration;
   };
 
 Julia.prototype.mapPixelToComplex = 

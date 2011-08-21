@@ -33,10 +33,10 @@ Complex.prototype.multiply =
 
 Complex.prototype.absolute = 
   function() {
-    return Math.sqrt( this.abs_squared() );
+    return Math.sqrt( this.absSquared() );
   };
 
-Complex.prototype.abs_squared =
+Complex.prototype.absSquared =
   function() {
     return this.real * this.real + this.imaginary * this.imaginary;
   };
