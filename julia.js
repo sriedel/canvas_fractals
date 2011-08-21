@@ -12,10 +12,11 @@ var Julia = function( width, height ) {
 };
 
 Julia.prototype.compute = 
-  function( maxIterations, func ) {
+  function( maxIterations, forCoefficients ) {
     this.resultArray = [];
     var point = new Complex( this.minReal, this.maxImg );
-    var triggerValue = 2.0;
+    var triggerValue = Math.sqrt( 2 * ( this.maxReal - this.minReal ) * 
+                                      ( this.maxReal - this.minReal ) ) / 2;
     var triggerValueSquare = triggerValue * triggerValue;
     var resultIndex = 0;
 
@@ -33,8 +34,8 @@ Julia.prototype.compute =
 
         while( iteration < maxIterations &&
                ( computePoint.real * computePoint.real + 
-                 computePoint.imaginary * computePoint.imaginary ) < triggerValue ) {
-          computePoint = func( computePoint );
+                 computePoint.imaginary * computePoint.imaginary ) < triggerValueSquare ) {
+          computePoint.multiply( computePoint ).add( forCoefficients );
           ++iteration;
         }
 
