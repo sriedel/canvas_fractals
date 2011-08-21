@@ -4,25 +4,43 @@
   <head></head>
   <body>
     <canvas id="canvas" width="400" height="400"></canvas>
+    <div id="function_definition_container">
+      Function Definition: <span id="function_definition"></span>
+    </div>
+    
+    <div id="iterations_container">
+      Iterations: <span id="iterations"></span>
+    </div>
 
     <script src="complex.js"></script>
     <script src="julia.js"></script>
     <script src="julia_painter.js"></script>
     <script src="julia_controller.js"></script>
     <script>
+      var functionElement = document.getElementById( 'function_definition' );
+      var iterationsElement = document.getElementById( 'iterations' );
+
+      function repaintFor( x, y ) {
+        var mappedComplexValue = julia.mapPixelToComplex( x, y );
+        var iterations = 15;
+
+        julia.compute( iterations,
+                       function( c ) {
+                         return c.multiply( c ).add( mappedComplexValue );
+                       } );
+        painter.buildImage( julia.resultArray );
+
+        functionElement.innerHTML = "z^2 + " + mappedComplexValue.real + " + i" + mappedComplexValue.imaginary;
+        iterationsElement.innerHTML = "15";
+      }
+
       var width = 400;
       var height = 400;
 
       var painter = new JuliaPainter( 'canvas', width, height );
-      var controller = new JuliaController( 'canvas' );
-
       var julia = new Julia( width, height );
-      julia.compute( 25, 
-                     function( c ) {
-                       return c.multiply( c ).add( -1.3 );
-                     });
 
-      painter.buildImage( julia.resultArray );
+      var controller = new JuliaController( 'canvas', repaintFor );
     </script>
   </body>
 </html>

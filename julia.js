@@ -44,3 +44,11 @@ Julia.prototype.spotCompute =
     return iteration;
   };
 
+Julia.prototype.mapPixelToComplex = 
+  function( x, y ) {
+    var real = ( x / this.width ) * ( this.maxReal - this.minReal ) + this.minReal;
+    var img = ( 1 - ( y / this.height ) ) * ( this.maxImg - this.minImg ) + this.minImg;
+
+    return new Complex( real, img );
+  };
+

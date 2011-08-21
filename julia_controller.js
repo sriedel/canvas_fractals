@@ -1,8 +1,11 @@
-var JuliaController = function( domId ) {
+var JuliaController = function( domId, recomputeFunc ) {
   this.element = document.getElementById( domId );
+
   this.element.addEventListener( "mousemove", this.mouseMoved, null );
   this.oldMouseX = null;
   this.oldMouseY = null;
+
+  JuliaController.recomputeFunc = recomputeFunc;
 };
 
 JuliaController.prototype.mouseMoved = 
@@ -14,7 +17,8 @@ JuliaController.prototype.mouseMoved =
 
     var relativeX = event.clientX - event.target.offsetLeft;
     var relativeY = event.clientY - event.target.offsetTop;
-    console.log( "X/Y: " + relativeX + "/" + relativeY );
+
+    JuliaController.recomputeFunc( relativeX, relativeY );
 
     this.oldMouseX = event.clientX;
     this.oldMouseY = event.clientY;
