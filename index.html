@@ -20,18 +20,18 @@
       var functionElement = document.getElementById( 'function_definition' );
       var iterationsElement = document.getElementById( 'iterations' );
 
-      function repaintFor( x, y ) {
+      function repaintFor( x, y, iterationsDelta ) {
         var mappedComplexValue = julia.mapPixelToComplex( x, y );
-        var iterations = 15;
+        JuliaController.adjustIterations( iterationsDelta );
 
-        julia.compute( iterations,
+        julia.compute( JuliaController.iterations,
                        function( c ) {
                          return c.multiply( c ).add( mappedComplexValue );
                        } );
         painter.buildImage( julia.resultArray );
 
         functionElement.innerHTML = "z^2 + " + mappedComplexValue.real + " + i" + mappedComplexValue.imaginary;
-        iterationsElement.innerHTML = "15";
+        iterationsElement.innerHTML = JuliaController.iterations;
       }
 
       var width = 400;
