@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 
 <html>
-  <head></head>
+  <head>
+    <style>
+      body { 
+        background-color: black;
+        color: #128;
+      }
+
+      #canvas {
+        margin: 10px auto;
+        display: table;
+      }
+
+      .descriptors {
+        margin: 10px auto;
+        display: table;
+      }
+    </style>
+  </head>
   <body>
-    <canvas id="canvas" width=500 height=500></canvas>
-    <div>Rendering time: <span id="rendering_time_element"></span>ms</div>
+    <canvas id="canvas" width=800 height=800></canvas>
+    <div class="descriptors">
+      Rendering time: <span id="rendering_time_element"></span>ms
+    </div>
 
     <script id="shader-fs" type="x-shader/x-fragment">
       #ifdef GL_ES
         precision highp float;
       #endif
 
-      const int max_steps = 100;
+      const int max_steps = 50;
 
       uniform ivec2 uMouseCursorPosition;
 
@@ -47,11 +66,11 @@
       void main(void) {
         vec4 color = vec4( 0, 0, 0, 1.0 );
         
-        mappedMouseCursorPosition.x = float(uMouseCursorPosition.x - 250) / 125.0;
-        mappedMouseCursorPosition.y = float(uMouseCursorPosition.y - 250) / 125.0;
+        mappedMouseCursorPosition.x = float(uMouseCursorPosition.x - 400) / 200.0;
+        mappedMouseCursorPosition.y = float(uMouseCursorPosition.y - 400) / 200.0;
 
-        int steps = julia_steps( vec2( ( float(gl_FragCoord.x) - 250.0 ) / 125.0, 
-                                       ( float(gl_FragCoord.y) - 250.0 ) / 125.0 ) );
+        int steps = julia_steps( vec2( ( float(gl_FragCoord.x) - 400.0 ) / 200.0, 
+                                       ( float(gl_FragCoord.y) - 400.0 ) / 200.0 ) );
         
         color.r = float(steps) / float(max_steps);
         color.g = color.r * 2.0;
