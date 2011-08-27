@@ -37,25 +37,24 @@
       vec2 mappedMouseCursorPosition;
 
       vec2 julia_function( in vec2 coords ) {
-        return vec2( coords.x * coords.x - 
-                     coords.y * coords.y + 
-                     mappedMouseCursorPosition.x, 
-                     2.0 * coords.x * coords.y + 
-                     mappedMouseCursorPosition.y);
+        vec2 squared = vec2( coords.x * coords.x -
+                             coords.y * coords.y,
+                             2.0 * coords.x * coords.y );
+
+
+        return squared + mappedMouseCursorPosition;
       }
 
       int julia_steps( in vec2 coords ) {
+        if( length( coords ) > 4.0 )
+          return 0;
+
         vec2 last_result = coords;
-        float magnitude = ( last_result.x * last_result.x ) +
-                          ( last_result.y * last_result.y );
 
         for( int steps = 0; steps < max_steps; ++steps ) {
           last_result = julia_function( last_result );
 
-          magnitude = ( last_result.x * last_result.x ) +
-                      ( last_result.y * last_result.y );
-
-          if( magnitude > 4.0 ) {
+          if( length( last_result ) > 4.0 ) {
             return steps;
           }
         }
@@ -63,20 +62,22 @@
         return max_steps;
       }
 
-      void main(void) {
-        vec4 color = vec4( 0, 0, 0, 1.0 );
-        
-        mappedMouseCursorPosition.x = float(uMouseCursorPosition.x - 400) / 200.0;
-        mappedMouseCursorPosition.y = float(uMouseCursorPosition.y - 400) / 200.0;
+      vec4 colorize( int steps ) {
+        vec4 color = vec4( 0.0, 0.0, 0.0, 1.0 );
 
-        int steps = julia_steps( vec2( ( float(gl_FragCoord.x) - 400.0 ) / 200.0, 
-                                       ( float(gl_FragCoord.y) - 400.0 ) / 200.0 ) );
-        
         color.r = float(steps) / float(max_steps);
         color.g = color.r * 2.0;
         color.b = color.r * 3.0;
 
-        gl_FragColor = color;
+        return color;
+      }
+
+      void main(void) {
+        mappedMouseCursorPosition = vec2(uMouseCursorPosition - 400) / 200.0;
+
+        int steps = julia_steps( vec2( gl_FragCoord - 400.0 ) / 200.0 );
+        
+        gl_FragColor = colorize( steps );
       }
     </script>
 
