@@ -22,7 +22,7 @@
   <body>
     <canvas id="canvas" width=800 height=800></canvas>
     <div class="descriptors">
-      Rendering time: <span id="rendering_time_element"></span>ms
+      <span id="rendering_time_element"></span> fps
     </div>
 
     <script id="shader-fs" type="x-shader/x-fragment">
@@ -219,12 +219,22 @@
       }
 
       var renderingTimeElement = document.getElementById( "rendering_time_element" );
+      var frames = 0;
+      var framesLastSecond = 0;
+      var lastTime = 0;
+
       function tick() {
         requestAnimFrame( tick );
-        var startTime = new Date().getTime();
         drawScene();
-        var frameRenderingTime = (new Date().getTime() - startTime );
-        renderingTimeElement.innerHTML= frameRenderingTime;
+        ++frames;
+
+        var now = Math.floor( new Date().getTime() / 1000 );
+        if( now > lastTime ) {
+          framesLastSecond = frames;
+          renderingTimeElement.innerHTML= framesLastSecond;
+          frames = 0;
+          lastTime = now;
+        }
       }
 
       var canvas = document.getElementById( 'canvas' );
